@@ -1,0 +1,11 @@
+{
+    "url":"http://localhost:8080/...",
+    "id":"10000",
+    "user":"11111",
+    "userDetails": "",
+    "businessDate":"",
+    "screenId":"xxx",
+    "attributes":"",
+    "pageSource":"sample.html",
+    "output":"c:\pts\"
+}

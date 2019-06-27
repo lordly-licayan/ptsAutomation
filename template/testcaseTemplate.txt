@@ -1,0 +1,44 @@
+testCase:1
+login website use testcase1Credential.txt
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+click "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+expected "<elementName>/<elementId>" = not null/not empty
+
+testCase:2
+login website use testcase1Credential.txt
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+click "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+tick "<elementName>/<elementId>"
+screenshot
+click "<elementName>/<elementId>"
+screenshot
+click "<elementName>/<elementId>"
+screenshot
+expected "<elementName>/<elementId>" = "<value>"
+
+testCase:3
+login website use testcase1Credential.txt
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+click "<elementName>/<elementId>"
+screenshot
+select "<elementName>/<elementId>"
+screenshot
+expected "<elementName>/<elementId>" = "<value>"
