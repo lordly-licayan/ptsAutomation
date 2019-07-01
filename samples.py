@@ -6,6 +6,7 @@ Please insert new functions WITH DESCRIPTIVE COMMENT below.
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.keys import Keys
+import pyodbc
 
 #set capabilities to enhance IE response
 capabilities = DesiredCapabilities.INTERNETEXPLORER.copy()
@@ -66,3 +67,10 @@ def searchNotepad(myDriver, searchValue, fileName):
 searchNotepad(myDriver,'sampleValue','sampleFileName')
 myDriver.close()
 myDriver.quit()
+
+#using pyodbc to connect py and db
+conn = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=C:\Users\rl.cruz\Documents\Database.accdb;')
+cursor = conn.cursor()
+cursor.execute('SELECT FoodID FROM Foods WHERE FoodID = 4563040')
+count = cursor.fetchall()
+print(len(count))
