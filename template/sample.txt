@@ -1,38 +1,18 @@
-testCase:1
+testCase1
 login "url"
-select "companyId":"id"
-select "username":"user"
-select "userDetails":"userDetails"
-select "businessDate":"businessDate"
-screenshot "evidence1.png"
-click "login"
-select "address":"Cebu City"
-select "attributes":"attributes"
-click "button"
-screenshot "evidence2.png"
-save "pageSource"
-find "xxx"
-screenshot "evidence3.png"
-find "yyy"
-screenshot "evidence4.png"
-expected "xxx":"not null"
-
-testCase:2
-configFile "testcase.txt"
-login "url"
-select "companyId":"id"
-select "username":"user"
-select "userDetails":"userDetails"
-select "businessDate":"businessDate"
-screenshot "evidence1.png"
+select "kaishaCd":"10000"
+select "username":"795317"
+select "jsonNjdUserDetails":"userDetails"
+select "jsonNjdBusinessDate":"businessDate"
+screenshot
 click "login"
 select "input":"screenId"
-select "attributes":"attributes"
+select "jsonRedirectAttributes":"attributes"
+screenshot
 click "button"
-screenshot "evidence2.png"
+screenshot
 save "pageSource"
-find "xxx"
-screenshot "evidence3.png"
-find "yyy"
-screenshot "evidence4.png"
-expected "xxx":"not null"
+find "契約先情報"
+find "xOptimisticLockId"
+expected xxx not null
+logout
