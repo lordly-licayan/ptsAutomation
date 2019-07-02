@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<data>
+    <pteInfo>
+        <url>http://127.0.0.1:8080/</url>
+        <sheetName>テスト項目</sheetName>
+        <testProcedure>テスト条件</testProcedure>
+        <expectedValue>予想結果</expectedValue>
+        <startingRow>26</startingRow>
+    </pteInfo>
+</data>
