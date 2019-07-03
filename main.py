@@ -1,9 +1,12 @@
 import sys, getopt
+import processor
+
 from config import configSetup as config
 
+
 def main(argv):
-    inputfile = ''
-    configFile= "ptsAutomation\config\config.xml"
+    inputfile = r'D:\myworkspace\python\efocus\test\PG01_プログラムテスト仕様書兼成績書(OHC11010).xlsx'
+    configFile= "config\config.xml"
    
     try:
         opts, args = getopt.getopt(argv,"i:",["ifile="])
@@ -18,9 +21,12 @@ def main(argv):
         elif opt in ("-i", "--ifile"):
             inputfile = arg
 
-    print ('PTS file is ', inputfile)
+    #print ('PTS file is ', inputfile)
     configMap= config.parseXML(configFile)
-    print(configMap)
+    #print(configMap)
+
+    processor.processInput(inputfile, configMap)
+
 
 if __name__ == "__main__":
    main(sys.argv[1:])
