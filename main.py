@@ -5,7 +5,7 @@ from config import configSetup as config
 
 
 def main(argv):
-    inputfile = r'D:\myworkspace\python\efocus\test\PG01_プログラムテスト仕様書兼成績書(OHC11010).xlsx'
+    inputfile = ""
     configFile= "config\config.xml"
    
     try:
