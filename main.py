@@ -11,7 +11,7 @@ def main(argv):
     inputFile = ''
     configFile= ''
     verbose= False
-
+   
     try:
         opts, args = getopt.getopt(argv,"i:c:v:h",["ifile=","config=","verbose="])
         
