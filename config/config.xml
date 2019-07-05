@@ -6,7 +6,9 @@
         <testProcedure>テスト条件</testProcedure>
         <expectedValue>予想結果</expectedValue>
         <startingRow>26</startingRow>
-        <outputFileSuffix>_processed.txt</outputFileSuffix>
-        <feedFileSuffix>_feed.txt</feedFileSuffix>
+        <outputFileSuffix>_processed</outputFileSuffix>
+        <feedFileSuffix>_feed</feedFileSuffix>
+        <fileType>.txt</fileType>
+        <outputFolder>output</outputFolder>
     </pteInfo>
 </data>

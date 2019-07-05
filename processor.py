@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 import helper
 import os
-import re
-import json
 
 from pathlib import Path
 
@@ -11,11 +9,14 @@ from pathlib import Path
 def processInput(inputFile, configMap):
     print("Processing file: ", inputFile)
     
-    ptsFilename= Path(inputFile).resolve().stem
-    ptsOutputFilename=  ptsFilename + configMap["outputFileSuffix"]
-    ptsFeedFilename= ptsFilename + configMap["feedFileSuffix"]
+    outputPath= helper.getPath(configMap["outputFolder"])
+    ptsFilename= Path(os.path.basename(inputFile)).resolve().stem
+    ptsOutputFilename=  helper.getPath( outputPath, ptsFilename + configMap["outputFileSuffix"] + configMap["fileType"])
+    ptsFeedFilename= helper.getPath( outputPath, ptsFilename + configMap["feedFileSuffix"] + configMap["fileType"])
     testProcedure= configMap["testProcedure"]
     expectedValue= configMap["expectedValue"]
+    
+    helper.makePath(outputPath)
     
     data = pd.read_excel (inputFile, sheet_name= configMap["sheetName"], skiprows= int(configMap["startingRow"]))
     df = pd.DataFrame(data, columns = [testProcedure, expectedValue])

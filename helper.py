@@ -1,4 +1,6 @@
 import re
+import os
+from os.path import abspath, dirname, join, exists
 
 TESTCASE= 'testCase'
 LOGIN= 'login'
@@ -12,6 +14,13 @@ EMPTY= ''
 COLUMN= ':'
 NEWLINE= '\n'
 
+def makePath(folderPath):
+    if not exists(folderPath):
+        os.mkdir(folderPath)
+
+def getPath(folder='', filename=''):
+    return join(dirname(abspath(__file__)), folder, filename)
+    
 def assembleTestCases(pts, testCases, overallPts, testProcedure, expectedValue):
     for index, row in pts.iterrows():
         testProcedureItem = row[testProcedure].strip()
