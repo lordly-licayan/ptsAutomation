@@ -2,7 +2,7 @@
 Library           SeleniumLibrary
 
 *** Variables ***
-${efocus_url}     TO_BE_CHANGED
+${efocus_url}     http://efgrde3399.efocus.css.fujitsu.com/efocus_top/otp10000/OTP10010.cfm
 ${browser}        ie
 ${_username}      GDC7
 ${_password}      1
@@ -24,7 +24,7 @@ TC1
     Select Previous Window
     ${expected_element}=    xGet Element    HC_CHA_CCD
     ${expected_value}=    Get Element Attribute    ${expected_element}    value
-    Should Be Equal    ${expected_value}    GDCS08
+    Should Be Equal    ${expected_value}    GDCS07
     [Teardown]    Close Page
 
 *** Keywords ***
@@ -50,14 +50,6 @@ Do Login
     xInput Text    PWD    ${password}
     xClick Element    BTNENTER
 
-Find Index
-    [Arguments]    ${element}    @{items}
-    ${index} =    Set Variable    ${0}
-    : FOR    ${item}    IN    @{items}
-    \    Run Keyword If    '${item}' == '${element}'    Return From Keyword    ${index}
-    \    ${index} =    Set Variable    ${index + 1}
-    Return From Keyword    ${-1}    # Also [Return] would work here.
-
 Select Previous Window
     @{windows}=    Get Window Handles
     ${win_length}=    Get Length    ${windows}
@@ -73,13 +65,13 @@ Set Exclude Window
 Focus Current Window
     Log    Excluding: ${excludes}
     ${stat}=    Run Keyword And Return Status    Select Window    ${excludes}
-    #${current_window}=
 
 xInput Text
     [Arguments]    ${element}    ${value}
     ${stat}=    Run Keyword And Return Status    Input Text    ${element}    ${value}
     Return From Keyword If    ${stat}==True    ${stat}
-    Input on Frame    Input Text    ${element}    ${value}
+    ${stat_frame}=    Input on Frame    Input Text    ${element}    ${value}
+    Check Element    ${element}    ${flag}
 
 xClick Element
     [Arguments]    ${element}
@@ -89,22 +81,17 @@ xClick Element
     ${stat_link}=    Run Keyword And Return Status    Click Link    ${element}
     Return From Keyword If    ${stat_link}==True    ${stat_link}
     ${stat_frame_element}=    Click on Frame    Click Element    ${element}
-    Return From Keyword If    ${stat_link}==True    ${stat_link}
+    Return From Keyword If    ${stat_frame_element}==True    ${stat_link}
     ${stat_frame_link}=    Click on Frame    Click Link    ${element}
-
-xClick Link
-    [Arguments]    ${element}
-    Log To Console    Clicking element ${element}
-    ${stat}=    Run Keyword And Return Status    Click Link    ${element}
-    Return From Keyword If    ${stat}==True    ${stat}
-    Click on Frame    Click Link    ${element}
+    Check Element    ${element}    ${stat_frame_link}
 
 xGet Element
     [Arguments]    ${element}
-    ${e}    Set Variable    ${EMPTY}
+    ${e}    Set Variable    False
     ${elem_exist}=    Run Keyword And Return Status    Get WebElement    ${element}
     Run Keyword And Return If    ${elem_exist}==True    Get WebElement    ${element}
     ${e}=    Run Keyword If    ${elem_exist}==False    xGet Frame Element    ${element}
+    Check Element    ${element}    ${e}
     [Return]    ${e}
 
 Click on Frame
@@ -135,10 +122,15 @@ Input on Frame
     \    ${stat}=    Run Keyword And Return Status    Run Keyword    ${keyword}    ${element}    ${value}
     \    Unselect Frame
     \    Exit For Loop If    ${stat}==True
+    [Return]    ${stat}
+
+Check Element
+    [Arguments]    ${element}    ${flag}
+    Should Be True    ${flag}    Element '${element}' not found
 
 xGet Frame Element
     [Arguments]    ${element}
-    ${e}    Set Variable    ${EMPTY}
+    ${e}    Set Variable    False
     ${frames_exist}=    Run Keyword And Return Status    Get WebElements    //frame
     Return From Keyword If    ${frames_exist}==False    ${e}
     ${frames}=    Get WebElements    //frame
