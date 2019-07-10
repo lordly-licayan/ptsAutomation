@@ -16,9 +16,7 @@ TC1
     xClick Element    Julian
     Close Window
     Select Previous Window
-    ${expected_element}=    xGet Element    HC_CHA_CCD
-    ${expected_value}=    Get Element Attribute    ${expected_element}    value
-    Should Be Equal    ${expected_value}    GDCS08
+	Expect Value    HC_CHA_CCD    GDCS08
     [Teardown]    Close Page
 
 

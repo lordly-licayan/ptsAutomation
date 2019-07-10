@@ -12,7 +12,7 @@ Open Login Page
     Set Exclude Window
     xClick Element    BTNVIEW_HC1
     Focus Current Window
-	Sleep    1
+    Sleep    1
     Do Login    ${_username}    ${_password}
 
 Open Main Page
@@ -104,6 +104,12 @@ Input on Frame
     \    Unselect Frame
     \    Exit For Loop If    ${stat}==True
     [Return]    ${stat}
+
+Expect Value
+    [Arguments]    ${element}    ${value}
+    ${expected_element}=    xGet Element    ${element}
+    ${expected_value}=    Get Element Attribute    ${expected_element}    value
+    Should Be Equal    ${expected_value}    ${value}
 
 Check Element
     [Arguments]    ${element}    ${flag}
