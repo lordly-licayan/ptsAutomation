@@ -1,22 +1,16 @@
 *** Settings ***
-Resource          TestingSuiteKeywords.txt
+Resource          KeywordsDef.robot
 
 *** Test Cases ***
 TC1
-    [Setup]    Open Main Page
+    [Setup]    Open Main Page       ${1}
     Open Login Page
     Focus Current Window
-    xClick Element    [OHC]発注
+    Click On Element    [OHC]発注
     Set Exclude Window
-    xClick Element    [OHC110]発注申請
-    Focus Current Window
+    Click On Element    [OHC110]発注申請
     Set Exclude Window
-    xClick Element    BTNVIEW_HC1
+    Click On Element    BTNVIEW_GAI1
     Focus Current Window
-    xClick Element    Julian
-    Close Window
-    Select Previous Window
-	Expect Value    HC_CHA_CCD    GDCS08
+    Select On Radio Button      Sel     1
     [Teardown]    Close Page
-
-
