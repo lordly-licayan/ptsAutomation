@@ -40,24 +40,24 @@ def modify_ini_file(file, x_dictionary, x_encoding):
     text_ini = file_ini.read()
     original_ini = text_ini
 
-    # Check if category exists
-    for modify_category in newJson:
-        if(str(text_ini).find(modify_category) == -1):
-            modify_isSuccess = "Error: " + modify_category + " category does not exist in file."
+    # Check if section exists
+    for modify_section in newJson:
+        if(str(text_ini).find(modify_section) == -1):
+            modify_isSuccess = "Error: " + modify_section + " section does not exist in file."
             return modify_isSuccess
 
-    # Fetch the data under modify_category only
-    for modify_category in newJson:
-        get_Start = fetch_from_right(text_ini, modify_category)
+    # Fetch the data under modify_section only
+    for modify_section in newJson:
+        get_Start = fetch_from_right(text_ini, modify_section)
         get_End = fetch_from_left(get_Start,'[')
 
         # Remove leading and trailing whitespaces and newlines
         strip_String = strip_string(get_End)
         original_stripped = strip_String
 
-        for info in newJson.get(modify_category):
+        for info in newJson.get(modify_section):
             new_id = info
-            new_value = newJson.get(modify_category)[info]
+            new_value = newJson.get(modify_section)[info]
             get_enclosed = None
             key_exists = False
 
@@ -81,20 +81,20 @@ def modify_ini_file(file, x_dictionary, x_encoding):
 
             # Check if key exists
             if(not key_exists):
-                modify_isSuccess = "Error: " + info + " key does not exist in " + modify_category + " category."
+                modify_isSuccess = "Error: " + info + " key does not exist in " + modify_section + " section."
                 return modify_isSuccess
 
             # Setting the replacement value = old value : new value
             replacements = {modify_Value:new_id+'='+new_value}
             x_pattern = '|'.join(r'\b%s\b' % re.escape(s) for s in replacements)
 
-            # Apply modification on data under modify_category
-            modified_category = re.sub(x_pattern, replace, strip_String)
-            if(modified_category == split_lines):
-                modified_category = modified_category.replace(modify_Value, new_id+'='+new_value)
-            strip_String = modified_category
+            # Apply modification on data under modify_section
+            modified_section = re.sub(x_pattern, replace, strip_String)
+            if(modified_section == split_lines):
+                modified_section = modified_section.replace(modify_Value, new_id+'='+new_value)
+            strip_String = modified_section
 
-        # Apply modified_category to the .ini file
+        # Apply modified_section to the .ini file
         modified_ini = text_ini.replace(original_stripped,strip_String)
         text_ini = modified_ini
 
