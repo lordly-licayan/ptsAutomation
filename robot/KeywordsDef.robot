@@ -2,50 +2,37 @@
 Library           SeleniumLibrary
 Library           OperatingSystem
 Library           DateTime
+Resource          WindowHandling.robot
 Resource          VarDef.robot
 
 *** Keywords ***
 Open Login Page
-    Set Exclude Window
     Click On Element    BTNVIEW_HC1
-    Focus Current Window
-    Sleep    1
+    Opens Window
     Do Login    GDC7    1
 
 Open Main Page
     [Arguments]    ${test_case_no}
     Sleep    2
     Create Test Case Folder     ${test_case_no}
-    # Set Screenshot Directory    D:/03_GIT/ptsAutomation/robot/screenshots
     Open Browser    ${SERVER1}    ${BROWSER}
     Page Should Contain    e-FOCUS
     Maximize Browser Window
+    Set Windows
 
 Close Page
     Sleep    1
     Close Browser
+
+Backup File
+    [Arguments]    ${absolutepath}
+    Copy File    ${absolutepath}    ${work_folder}
 
 Do Login
     [Arguments]    ${username}    ${password}
     Input On Text    EMP_CCD    ${username}
     Input On Text    PWD    ${password}
     Click On Element    BTNENTER
-
-Select Previous Window
-    @{windows}=    Get Window Handles
-    ${win_length}=    Get Length    ${windows}
-    : FOR    ${count}    IN RANGE    ${win_length}
-    \    ${index} =    Set Variable    ${win_length-1-${count}}
-    \    ${win_stat}=    Run Keyword and Return Status    Select Window    @{windows}[${index}]
-    \    Exit For Loop If    ${win_stat}==True
-
-Set Exclude Window
-    @{excludes}=    Get Window Handles
-    Set Global Variable    @{excludes}
-
-Focus Current Window
-    Log    Excluding: ${excludes}
-    ${stat}=    Run Keyword And Return Status    Select Window    ${excludes}
 
 Input On Text
     [Arguments]    ${element}    ${value}
@@ -109,7 +96,7 @@ Perform On Frame
     \    Select Frame    ${frame_name}
     \    ${stat}=   Run Keyword If      ${args_length} == 1       Run Keyword And Return Status    Run Keyword    ${keyword}    @{args}[0]
     \    Run Keyword If     ${stat}==True       Run Keywords    Unselect Frame      Exit For Loop
-    \    ${stat}=   Run Keyword If      ${args_length} == 2       Run Keyword And Return Status    Run Keyword    ${keyword}    @{args}[0]    ${args}[1]
+    \    ${stat}=   Run Keyword If      ${args_length} == 2       Run Keyword And Return Status    Run Keyword    ${keyword}    @{args}[0]    @{args}[1]
     \    Unselect Frame
     \    Exit For Loop If    ${stat}==True
     [Return]    ${stat}
@@ -126,6 +113,13 @@ Scroll To Element
     ${e}=    Get Element    ${element}
     Scroll Element Into View    ${e}
 
+Wait Keyword
+    [Arguments]     ${keyword}      @{args}
+    ${args_length}=     Get Length      ${args}
+    Run Keyword If    ${args_length} == 1     Wait Until Keyword Succeeds    ${DEFAULT_RETRY}    ${DEFAULT_RETRY_INTERVAL}    ${keyword}   @{args}[0]
+    Run Keyword If    ${args_length} == 2     Wait Until Keyword Succeeds    ${DEFAULT_RETRY}    ${DEFAULT_RETRY_INTERVAL}    ${keyword}   @{args}[0]   @{args}[1]
+    Run Keyword If    ${args_length} == 3     Wait Until Keyword Succeeds    ${DEFAULT_RETRY}    ${DEFAULT_RETRY_INTERVAL}    ${keyword}   @{args}[0]   @{args}[1]   @{args}[2]
+
 Get Element
     [Arguments]    ${element}
     ${e}    Set Variable    False
@@ -134,6 +128,12 @@ Get Element
     ${e}=    Run Keyword If    ${elem_exist}==False    Get Frame Element    ${element}
     Element Should Exist    ${element}    ${e}
     [Return]    ${e}
+
+Get Input Value
+    [Arguments]    ${element}
+    ${e}=    Get Element    ${element}
+    ${value}=   Get Element Attribute    ${e}    value
+    [Return]    ${value}
 
 Get Frame Element
     [Arguments]    ${element}
@@ -159,26 +159,32 @@ Element Should Exist
 
 Expect Input Value
     [Arguments]    ${element}    ${value}
-    ${expected_element}=    Get Element    ${element}
-    ${expected_value}=    Get Element Attribute    ${expected_element}    value
+    Sleep    1
+    ${expected_value}=    Get Input Value    ${element}
     Should Be Equal    ${expected_value}    ${value}
 
 Expect Checkbox State
     [Arguments]    ${element}    ${state}
+    Sleep    1
     ${e}=    Get Element    ${element}
     Run Keyword If    ${state}==${ON}    Checkbox Should Be Selected    ${e}
     Run Keyword If    ${state}==${OFF}    Checkbox Should Not Be Selected    ${e}
 
-Create Work Folder
-    ${date} =	Get Current Date	result_format=%Y-%m-%d
-    ${work_folder}=     Set Variable    ${DIR_OUTPUT}\\${date}
-    Set Global Variable     ${work_folder}
-    Create Directory    ${work_folder}
+Expect Radiobutton Selected
+    [Arguments]    ${group_name}    ${value}
+    Sleep    1
+    ${stat_element}=    Run Keyword And Return Status    Select Radio Button    ${group_name}    ${value}
+    Return From Keyword If    ${stat_element}==True    ${stat_element}
+    ${stat_frame_element}=      Perform On Frame    Select Radio Button    ${group_name}    ${value}
+    Element Should Exist    ${value}    ${e}  
 
 Create Test Case Folder
     [Arguments]     ${test_case_no}
-    Create Work Folder
-    ${epoch_time}=      Get Time    epoch
-    ${DIR_SCREENSHOT}=      Set Variable    ${work_folder}\\TestCase${test_case_no}\\${epoch_time}
+    ${DIR_SCREENSHOT}=      Set Variable    ${OUTPUTDIR}\\TestCase${test_case_no}
     Set Screenshot Directory    ${DIR_SCREENSHOT}
     Create Directory        ${DIR_SCREENSHOT}
+
+Do Page Screenshot
+    [Arguments]     ${filename}
+    Capture Page Screenshot     ${filename}
+    Sleep   1
